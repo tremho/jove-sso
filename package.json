@@ -1,0 +1,35 @@
+{
+  "name": "jove-sso",
+  "projId": "com.tremho.jove-sso",
+  "displayName": "jove-sso",
+  "shortDisplayName": "jove-sso",
+  "description": "Single Sign On development for Jove",
+  "copyright": "©2021 Tremho Berserker Development, LLC",
+  "author": "tremho",
+  "license": "NONE",
+  "backMain": "src/tbAppBack.ts",
+  "frontMain": "src/tbAppFront.ts",
+  "scripts": {
+    "postinstall": "npm run initDesktop && npm run initCli",
+    "initDesktop": "cd node_modules/@tremho/jove-desktop && npm install",
+    "initCli": "cd node_modules/@tremho/jove-cli && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "tsc && node build/index.js"
+  },
+  "dependencies": {
+    "@tremho/jove-common": "^0.6.9-pre-release.137",
+    "@tremho/jove-desktop": "^0.6.9-pre-release.31",
+    "awesome-typescript-loader": "^5.2.1",
+    "css-element-queries": "^1.2.3",
+    "riot": "^5.3.3",
+    "sourcemap-codec": "^1.4.8"
+  },
+  "devDependencies": {
+    "@tremho/jove-cli": "^0.6.9-pre-release",
+    "@tremho/pub-bumper": "^0.0.2",
+    "electron-builder": "^22.11.7",
+    "readline-sync": "^1.4.10",
+    "typescript": "^4.3.5",
+    "webpack": "^4.46.0"
+  }
+}

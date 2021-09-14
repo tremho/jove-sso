@@ -1,0 +1,32 @@
+cwd=`pwd`
+cmt=$1
+if [ "$cmt" == "" ]; then
+    cmt="another full test run"
+fi
+
+echo Need to fix pub-bump to do build
+cd ../thunderbolt-desktop
+npm run prepublish 
+cd ../thunderbolt-common
+npm run prepublish 
+cd ../thunderbolt-cli
+npm run prepublish 
+cd ../thunderbolt-mobile
+npm run prepublish 
+cd $cwd
+
+echo Publishing new updates
+pub-bump --comment "$cmt" --config pub-bump.json
+
+npm uninstall @tremho/jove-desktop
+npm uninstall @tremho/jove-common
+npm install @tremho/jove-desktop
+npm install @tremho/jove-common
+npm install
+tbx build
+
+# no repository yet
+#pwd
+#git commit -am "${cmt}"
+#git push
+
