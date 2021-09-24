@@ -1,11 +1,14 @@
 
 /* application code for main-page */
+import {AppCore} from "@tremho/jove-common";
 
 const service = 'https://tremho.com'
 // const service = 'http://localhost:8081'
 
-let app:any
-export function pageStart(pApp:any) {
+const appId="com.tremho.jove-sso"
+
+let app:AppCore
+export function pageStart(pApp:AppCore) {
     console.log('main page started')
     app = pApp
 }
@@ -20,22 +23,6 @@ function webSendTest() {
 
 }
 
-let windowOpen:any = null
-
-function newWindowTest() {
-    if(typeof window !== "undefined") {
-        windowOpen = window.open(service+'/hello')
-        setTimeout(closeWindow, 3000)
-    }
-}
-
-function closeWindow() {
-    if(windowOpen) {
-        windowOpen.close()
-    }
-    windowOpen = null
-}
-
 export function runTest() {
 
     signInStartAndGetSiaToken().then(siaToken => {
@@ -45,6 +32,10 @@ export function runTest() {
             console.error('failed to get siaToken! (are we online?)')
         }
     })
+}
+
+export function runSession() {
+    app.navigateToPage('session')
 }
 
 // ================
@@ -57,7 +48,7 @@ function signInStartAndGetSiaToken(): Promise<string> {
     request.method = 'get'
     request.endpoint = service+'/sign-in-start'
     request.headers = {"Accept":"application/json"}
-    request.parameters = [{name: 'appId', value: 'com.tremho.jove-sso'}]
+    request.parameters = {appId}
     return app.MainApi.webSend(request).then((resp:any) => {
         console.log(resp)
         if(resp.code === 200) {
@@ -71,7 +62,11 @@ function signInStartAndGetSiaToken(): Promise<string> {
 function launchSignInWindow(siaToken:string) {
     if(typeof window !== "undefined") {
         console.log('launching SSO window')
-        windowOpen = window.open(service+'/sign-in?sia='+siaToken)
+        const ep =service+'/sign-in?sia='+siaToken+'&appId='+appId
+        app.callExtension('extopen', 'open', ep).then(() => {
+            console.log('extBrowser promise resolves...')
+        })
+
         pollTimerId = setTimeout(() => {
             console.log('first poll')
             pollProcess(siaToken)
@@ -85,7 +80,7 @@ function pollProcess(siaToken:string) {
     console.log('polling...')
     const request:any = {}
     request.method = 'get'
-    request.parameters= [{name:'appId', value:'com.tremho.jove-sso'},{name: 'siaToken', value:siaToken}]
+    request.parameters= {appId, siaToken}
     request.endpoint = service+'/sign-in-check'
     request.headers = {"Accept":"application/json"}
     return app.MainApi.webSend(request).then((resp:any) => {
@@ -109,12 +104,10 @@ function pollProcess(siaToken:string) {
             }
             else if(status === 'complete') {
                 console.log('successful login transfer of data:', data)
-                windowOpen.close()
                 // now do whatever: resolving a promise seems like a good idea
                 console.log('Voila!')
             }
         }
         pollTimerId = undefined
     })
-
 }

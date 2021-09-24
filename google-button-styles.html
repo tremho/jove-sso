@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Style exploration for Google sign-in buttons</title>
+ <script>
+     function onsignout() {
+       alert('sign-out')
+     }
+ </script>
+ <style>
+   .googleG {
+       width: 30px;
+       height: 30px;
+       border-radius: 30px;
+   }
+   .avatar {
+       width: 30px;
+       height: 30px;
+       border-radius: 30px;
+   }
+   .name {
+       font-family: Arial, Helvetica, sans-serif;
+       font-size: 20px;
+       line-height:30px;
+       height:30px;
+   }
+   .email {
+       font-size: 15px;
+       font-style: italic;
+       color: dimgrey;
+       padding-left: 30px;
+   }
+   .signout {
+       line-height: 10px;
+       height: 10px;
+       font-size:8px;
+       padding-left: 30px;
+
+   }
+   #google-sign-in {
+       border: none;
+       font-family: Arial, Helvetica, sans-serif;
+       font-size: 20px;
+       line-height:30px;
+       height:30px;
+   }
+   #google-continue {
+       border: none;
+       font-family: Arial, Helvetica, sans-serif;
+       font-size: 17px;
+   }
+ </style>
+</head>
+<body>
+  <button id="google-sign-in">
+    <span>
+     <img class="googleG" src="googleG.png"/>
+     <span>Sign-in with Google</span>
+    </span>
+  </button>
+  <div style="height:50px;"></div>
+
+  <button id="google-continue">
+    <span>
+      <img class="avatar" src="https://lh3.googleusercontent.com/a/AATXAJzn3Fgxtmn4mk_HHefrCnIfZgZD0RbiCaigkX1F=s100"/>
+      <span>Continue as </span><span class="name"> first lastname</span>
+      <img class="googleG" src="googleG.png"/>
+    </span>
+    <br/>
+    <span class = 'email'>username@provider.com</span>
+    <span class = 'signout'><a href="javascript:onsignout()"> sign-out </a></span>
+
+  </button>
+</body>
+</html>

@@ -13,6 +13,8 @@
  * are relevant.
  *
  */
+import {AppCore} from "@tremho/jove-common";
+
 export class ServiceResponse {
     code:number = 0
     success: boolean = false
@@ -35,24 +37,24 @@ export class Service {
         if(service) this.serviceRoot = service
     }
 
-    callService(apiEndpoint:string, parameters:object, method='get') : Promise<ServiceResponse> {
+    callService(apiEndpoint:string, parameters:object = {}, method='get') : Promise<ServiceResponse> {
         const request: any = {}
         request.method = method
         request.parameters = parameters
         request.endpoint = this.serviceRoot + apiEndpoint
         request.headers = {
             "Accept": "application/json",
-            "X-TBD-Session-Id": this.sessionId
+            "x-tbd-session-id": this.sessionId
         }
         return this.app.MainApi.webSend(request).then((resp: any) => {
             // console.log(resp)
             const srvResp = new ServiceResponse()
             srvResp.code = resp.code
-            srvResp.success = (resp.statusCode === 2)
+            srvResp.success = (resp.statusType === 2)
             srvResp.headers = resp.headers
             if(srvResp.success) {
                 // only update sessionId and report data return on success
-                this.sessionId = resp.headers['X-TBD-Next-Session-Id']
+                this.sessionId = resp.headers['x-tbd-next-session-id']
                 let body = resp.body
                 let data
                 if (body) { // if body is undefined, data is undefined
@@ -69,6 +71,41 @@ export class Service {
                 srvResp.data = data
             }
             return srvResp
+        })
+    }
+
+    /**
+     * Saves the session in a file named '.session' in the current directory
+
+     * @param {AppCore} app The application doing the persist
+     */
+    persist(app:AppCore) {
+        app.MainApi.writeFileText('.session', JSON.stringify(this.toPersist()))
+
+    }
+
+    /**
+     * Restores a session where it last left off when persist was called
+     * This can restore a session after an indeterminate and unbounded amount of time
+     * It is up to the app to determine sensible timeouts for invalid data within a session,
+     * such as when to require a refreshed login.
+     *
+     * @param {AppCore} app The application doing the restore
+     */
+    restore(app:AppCore) {
+        app.MainApi.readFileText('.session').then((pstr:string) => {
+            let pst:any = {}
+            try {
+                if(pstr) {
+                    pst = JSON.parse(pstr)
+                }
+            } catch(e) {
+            }
+            if(pst.name === 'Service') {
+                if(pst.serviceRoot === this.serviceRoot) {
+                    this.sessionId = pst.sessionId
+                }
+            }
         })
     }
 

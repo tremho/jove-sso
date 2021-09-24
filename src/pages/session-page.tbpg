@@ -1,0 +1,16 @@
+
+#page session
+title='Session Page'
+
+#content
+<simple-label text="Session Page "/>
+<simple-button text="clear session" action="clearSession"/>
+
+<labeled-value label="Session ID" value="$$sessionId" />
+<text-area readonly="true" class="pre" text="$$sessionData" />
+
+<simple-button text="new count" action="newCount"/>
+<simple-button text="new random number" action="newRandomNumber"/>
+<simple-button text="new rambling text" action="newRamble"/>
+<!--<simple-button text="log in" action="login" />-->
+<text-area readonly="true" class="desc" text="$$description"/>

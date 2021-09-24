@@ -137,13 +137,13 @@ we can use this to limit access to apps, and for contact.
   - then send cred data to contact page form or whitelist redirect
   
 ####### Others
-- [Microsoft](https://developer.microsoft.com/en-us/identity/add-sign-in-with-microsoft)
 - [Google](https://developers.google.com/identity/sign-in/web/sign-in)
+- [Microsoft](https://developer.microsoft.com/en-us/identity/add-sign-in-with-microsoft)
 - [Amazon](https://developer.amazon.com/apps-and-games/login-with-amazon)
-- [Github](https://www.back4app.com/docs/platform/sign-in-with-github)
 - [LinkedIn](https://docs.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin)
 - [Facebook](https://developers.facebook.com/docs/facebook-login)
 - [Instagram](https://developers.facebook.com/docs/instagram-basic-display-api/overview#user-token-generator)
+- [Github](https://www.back4app.com/docs/platform/sign-in-with-github)
 
 
 -------------
@@ -177,4 +177,85 @@ we can repeat this call until we get success.
 
 - rehydrate session
 - server knows who we are when we call whoami, no login neccesary
+
+
+----
+
+###### 9/14/21
+#### MADNESS!
+
+So what is it with this stuff? Things just fail randomly
+I have had this happen before in various ways and its basically
+a need to re-install or reconfigure some stupid dependency.
+
+But Why?
+
+- is it Node?
+- is it Me?
+- is it the Universe conspiring against progress?
+
+Something in the webpack (I'm guessing (not)awesomeTypecriptLoader) has
+an issue of loading typescript.
+
+Would installing typescript 2.x or 3 as a dependency actually help?
+Or would it hurt?
+What alternatives to ATL can I finally work with?  
+Recount the reasons why i need ATL instead of (the other one)
+
+------------
+#### Happiness restored by 9/20
+
+Today is a good day.
+Session page is working with a good demonstration of
+the basic flow of deferred login and session continuity and persistence.
+
+- Should package the login functionality into its own module though
+for better re-useability.
+  
+- Service and Login modules should be npm'd somehow for import into
+other app projects (this can be a future todo, when we actually start alcaeus)
+  
+- [X] Does this work to export and run on tremho, with actual SSO?
+    - __yes__.  _problem before was due to missing .aws credentials_
+
+<del>    
+- no... A couple problems
+</del>
+<del>
+1. The poll is not finding the filled slot
+2. The user is not getting attached
+</del>
+
+<del>
+And while we're at that...  
+Redo the polling as described above. we already have a LocalAccessResolver
+that we can recraft into LoginCompleteResolver
+so the poll only returns when that is done (or we timeout)
+</del>
+
+<del>
+Double check our client code to make sure we actually do close the 
+window. also check the server to insure we're sending the welcome html
+because I might have broken this.
+</del>
+
+Things are working as expected both locally and remote, and I even improved
+the flow slightly and the logging too.
+
+#### Now onto the other providers
+
+I like the continue as... feature of the google flow.  I think we could do that
+in our app for all by remembering the user info in the session persist, including provider
+That way we can show the sign-in || continue/sign-out options.
+sign out would just remove the user id from the persist and then
+none of the buttons would show continue.
+
+Google needs to be prohibited from showing based on its own status, and 
+defer to ours, if we have it.
+
+hmmm... not sure.
+
+
+
+
 

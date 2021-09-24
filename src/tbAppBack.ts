@@ -11,13 +11,19 @@ In a Nativescript export, this will become the startup bootstrap and API extensi
 import {targetPlatform} from '@tremho/jove-desktop'
 import {registerApp, TBBackApp, FrameworkBackContext} from "@tremho/jove-common"
 
+import * as extOpen from './browsex/external-browser'
+
 class TBTestApp implements TBBackApp {
 
     appStart(context: FrameworkBackContext) {
         console.log('Back App Start called', Date.now())
 
         // put your back processes startup code here
+
         // register any extensions at this point
+        console.log('registering extopen extension')
+        context.registerExtensionModule('extopen', extOpen)
+
     }
 
     appExit(context: FrameworkBackContext) {

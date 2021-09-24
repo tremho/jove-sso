@@ -5,3 +5,5 @@ title='Main Page'
 #content
     <simple-label text="Hello, World!"/>        
     <simple-button text="run test" action="runTest"/>
+    <fill-space height="3em"/>
+    <simple-button text="session page" action="runSession"/>
