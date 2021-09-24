@@ -109,9 +109,9 @@ a different one.  Worst case is you become a new user again.
   
 _we can ask the (new) user if they think they already have an account_
 
-if they can give us the other email, and we find that, we can send a mail there, and a mail to 
-the 'new email' and if we get positive responses we can validate it.
-Or a no-response for the 'fake' email is probably okay after a time.
+
+if they can give us the other email, and we find that, we can send a mail there, and a mail to the 'new email' and if we get positive responses we can validate it. Or a no-response for the 'fake' email is probably okay after a time.
+
 -----
 
 #### 9/10/21
