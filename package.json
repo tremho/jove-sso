@@ -1,8 +1,8 @@
 {
   "name": "jove-sso",
-  "projId": "com.tremho.jove-sso",
-  "displayName": "jove-sso",
-  "shortDisplayName": "jove-sso",
+  "projId": "com.tremho.joveSso",
+  "displayName": "joveSso",
+  "shortDisplayName": "joveSso",
   "description": "Single Sign On development for Jove",
   "copyright": "©2021 Tremho Berserker Development, LLC",
   "author": "tremho",
@@ -17,8 +17,8 @@
     "run": "tsc && node build/index.js"
   },
   "dependencies": {
-    "@tremho/jove-common": "^0.6.9-pre-release.152",
-    "@tremho/jove-desktop": "^0.6.9-pre-release.43",
+    "@tremho/jove-common": "^0.6.9-pre-release.166",
+    "@tremho/jove-desktop": "^0.6.9-pre-release.47",
     "css-element-queries": "^1.2.3",
     "riot": "^5.3.3",
     "sourcemap-codec": "^1.4.8"

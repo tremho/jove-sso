@@ -16,6 +16,7 @@ const appId = 'com.tremho.jove-sso'
 // should be able to get the user data and show it too
 
 // const serviceHost = 'http://localhost:8081'
+// const serviceHost = 'http://192.168.1.67:8081'
 const serviceHost = 'https://tremho.com'
 
 const description = `
@@ -45,7 +46,11 @@ export function pageStart(pApp:AppCore) {
         })
         console.log('service created')
         app.updatePage(pageName)
-        restoreSession()
+        if(app.MainApi) {
+            restoreSession()
+        } else {
+            console.error('no MainApi')
+        }
     }
 
 }
@@ -73,7 +78,17 @@ function formatResponse(data:any) {
     return str
 }
 
-export async function newCount(ed:EventData) {
+export function newCount(ed:EventData) {
+    if(ed.app) {
+        service.callService('/newCount', {appId}).then(response => {
+            ed.app.setPageData(pageName, 'sessionData', formatResponse(response.data))
+            ed.app.updatePage(pageName)
+            saveSession()
+        })
+    }
+}
+
+async function anewCount(ed:EventData) {
     if(ed.app) {
         const response = await service.callService('/newCount', {appId})
         ed.app.setPageData(pageName, 'sessionData', formatResponse(response.data))
@@ -81,7 +96,12 @@ export async function newCount(ed:EventData) {
         saveSession()
     }
 }
-export async function newRandomNumber(ed:EventData) {
+
+export function newRandomNumber(ed:EventData) {
+    anewRandomNumber(ed)
+}
+
+async function anewRandomNumber(ed:EventData) {
     if(ed.app) {
         const response = await service.callService('/newRandomNumber', {appId})
         ed.app.setPageData(pageName, 'sessionData', formatResponse(response.data))
@@ -89,8 +109,11 @@ export async function newRandomNumber(ed:EventData) {
         saveSession()
     }
 }
+export function newRamble(ed:EventData) {
+    anewRamble(ed)
+}
 
-export async function newRamble(ed:EventData) {
+async function anewRamble(ed:EventData) {
     if(ed.app) {
         const response = await service.callService('/newRamble', {appId})
         const loginRequired = (response.code == 403)
@@ -124,18 +147,16 @@ export async function login(ed:EventData, cb?:any) {
     }
 }
 function launchSignInWindow(siaToken:string) {
-    if(typeof window !== "undefined") {
-        console.log('launching SSO window')
-        let ep = service.serviceRoot+'/sign-in?sia='+siaToken+'&appId='+appId
-        app.callExtension('extopen', 'open', ep).then(() => {
-            console.log('extBrowser promise resolves...')
-        })
+    console.log('launching SSO window')
+    let ep = service.serviceRoot+'/sign-in?sia='+siaToken+'&appId='+appId
+    app.callExtension('extopen', 'open', ep).then(() => {
+        console.log('extBrowser promise resolves...')
+    })
 
-        pollTimerId = setTimeout(() => {
-            console.log('first poll')
-            pollProcess(siaToken)
-        }, 5000)
-    }
+    pollTimerId = setTimeout(() => {
+        console.log('first poll')
+        pollProcess(siaToken)
+    }, 5000)
 }
 let pollTimerId:any
 let pollCount = 0;

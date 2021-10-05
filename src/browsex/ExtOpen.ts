@@ -1,15 +1,20 @@
 
-let shell:any;
+let opener:any;
 
 export class ExtOpen {
 
-    initContext(abr:any) {
-        console.log('initContext', abr)
-        shell = abr.electron.shell
+    initContext(injections:any, fbc:any) {
+        console.log('initContext', injections, fbc)
+        opener = injections && injections.electron && injections.electron.shell && injections.electron.shell.openExternal
+        if(!opener) {
+            if (injections && injections.nscore && injections.nscore.Utils) {
+                opener = injections.nscore.Utils.openUrl
+            }
+        }
     }
 
     open(location:string):Promise<void> {
-        return shell.openExternal(location, {activate:true})
+        return opener && opener(location, {activate:true})
     }
 
 }

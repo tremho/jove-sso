@@ -58,6 +58,14 @@ export class Service {
                 let body = resp.body
                 let data
                 if (body) { // if body is undefined, data is undefined
+                    if(typeof body.toString === 'function') {
+                        // response from NS has some extraction functions
+                        try {
+                            body = body.toString()
+                        } catch(e) {
+                            console.error(`Parsing response body from ${request.endpoint}`, e)
+                        }
+                    }
                     if (typeof body === 'object') {
                         data = body                         // js Object expected
                     } else {

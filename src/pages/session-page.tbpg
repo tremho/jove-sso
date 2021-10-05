@@ -6,7 +6,7 @@ title='Session Page'
 <simple-label text="Session Page "/>
 <simple-button text="clear session" action="clearSession"/>
 
-<labeled-value label="Session ID" value="$$sessionId" />
+<simple-label text ="Session ID = $$sessionId" />
 <text-area readonly="true" class="pre" text="$$sessionData" />
 
 <simple-button text="new count" action="newCount"/>
